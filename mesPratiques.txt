@@ -1,0 +1,5 @@
+
+créer un virtual env
+se connecter donc à l'env 
+installer ensuite Flask pour mon api = pour run flask run
+créer de mon app
