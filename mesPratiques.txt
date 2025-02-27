@@ -3,3 +3,12 @@ créer un virtual env
 se connecter donc à l'env 
 installer ensuite Flask pour mon api = pour run flask run
 créer de mon app
+
+**************************************************
+Une fois que tu as construit ton image avec :
+
+sudo docker build -t ligue_management_restapi
+
+Tu peux exécuter un conteneur basé sur cette image avec la commande suivante :
+
+sudo docker run -p 5005:5000 ligue_management_restapi
