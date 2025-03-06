@@ -1,54 +1,21 @@
 from flask import Flask, request
-
+from db import ligues,teams
+import uuid
 
 app = Flask(__name__)
 
-ligues = [
-    {
-        "ligue_name" : "PL",
-        "ligue_teams" : [
-            {
-                "team_name" : "Arsenal FC",
-                "team_players" : [
-                    {
-                        "player_name":"BOUKAYO SAKA",
-                        "player_nationality": "Nigeria-England"
-
-                    }
-                ]
-            }
-        ]
-               
-    },
-        {
-        "ligue_name" : "BBVA",
-        "ligue_teams" : [
-            {
-                "team_name" : "Barcelona FC",
-                "team_players" : [
-                    {
-                        "player_name":"Lamine YAMAL",
-                        "player_nationality": "Morrocco-Spain"
-
-                    }
-                ]
-            }
-        ]
-               
-    }
-]
 
 @app.get("/ligues")
 def get_Sports():
-
-    return {"Ligues List" : ligues}
+    return {"Ligues List" : list(ligues.values())}
 
 @app.post("/ligues/add_ligue")
 def create_ligue():
 
-    get_request = request.get_json()
-    new_ligue = {"ligue_name" : get_request["ligue_name"], "ligue_teams" : []}
-    ligues.append(new_ligue)
+    get_data = request.get_json()
+    ligue_id = uuid.uuid4().hex
+    new_ligue = {"id" : ligue_id, **get_data }
+    ligues[ligue_id] = new_ligue
     return new_ligue, 200
 
 @app.post("/ligues/add_ligue_teams/<string:name>/ligue_teams")
@@ -64,14 +31,13 @@ def create_team(name):
             return new_team, 200
     return {"Message Error":"Ligue doesn't exist."}, 404
 
-@app.get("/ligues/<string:name>")
-def get_ligues(name):
-
-    for ligue in ligues:
-        if ligue["ligue_name"] == name :
-
-            return  ligue
-        return {"Message error : " :"Not found"}, 404
+@app.get("/ligues/<string:ligue_id>")
+def get_ligues(ligue_id):
+        
+        try:
+            return ligues[ligue_id]
+        except KeyError:
+            return {"Message error : " :"Not found"}, 404
     
 
 @app.get("/ligues/<string:name>/team_info")

@@ -1,0 +1,2 @@
+ligues = {}
+teams = {}
